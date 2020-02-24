@@ -1,7 +1,7 @@
-# Notes after the exercise ( 2020-02-11 )
+# Notes after the exercise ( 2020-02-24 )
 
 - This repository contains Java code written as an exercise for applying to a Senior Backend Developer position.
-- The [instructions for exercise](instructions_for_exercise.md) mandate usage of pom-file with deprecated dependencies.
+- The [instructions for exercise](instructions_for_exercise.md) describe what this exercise was about.
 
 # Top Grossing data
 
