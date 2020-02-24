@@ -6,6 +6,7 @@ import org.apache.commons.codec.binary.Base64;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.Optional;
 
 import javax.inject.Inject;
@@ -57,27 +58,14 @@ public class AuthService {
             throw ResponseFactory.generateNotAuthorizedException();
         }
 
-        if (!slowCompare(
-                Base64.decodeBase64(user.get().getPasswordSaltedHash()),
+        // We are comparing hashes so we don't have to guard against a timing attack by using a
+        // constant time comparison function
+        if (!Arrays.equals(Base64.decodeBase64(user.get().getPasswordSaltedHash()),
                 hashSha256(decoded[PASSWORD_INDEX] + user.get().getSalt()))) {
             throw ResponseFactory.generateNotAuthorizedException();
-        };
+        }
 
         return user.get();
-    }
-
-    // prevent timing attack by comparing in constant time
-    private boolean slowCompare(byte[] first, byte[] second) {
-        if (first.length != second.length) {
-            return false;
-        }
-
-        int status = 0;
-        for (int i = 0; i < first.length; i++) {
-            status = status | (first[i] ^ second[i]);
-        }
-
-        return status == 0;
     }
 
     private byte[] hashSha256(String toBeHashed) {
